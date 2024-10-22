@@ -1,6 +1,6 @@
 #ROB 417 - Osian Leahy
 #This file should include
-#Code is ported from threeD_robot_arm_links.m
+#Code is ported from threeD_robot_arm_links.m, threeD_robot_arm_endpoints.m
 from copy import deepcopy
 
 import numpy as np
@@ -8,6 +8,7 @@ import numpy as np
 import Links
 import Rotations as Ro
 import VectorSets as Vs
+
 
 #three_d_robot_arm_links
 #Rotates and places link vectors in space prior to graphing. Uses the following inputs:
@@ -29,7 +30,7 @@ def three_d_robot_arm_links(link_vectors,joint_angles,joint_axes):
     #Rotate each link endpoint into the world frame
     link_vectors_in_world = Vs.vector_set_rotate(link_vectors,r_links)
 
-    #Generate the start/end matrices for each rotated link (added zero columns to make them atrices
+    #Generate the start/end matrices for each rotated link (added zero columns to make them matrices
     links_in_world = Links.build_links(link_vectors_in_world)
 
     #Find the endpoint of each link by adding the previous link's endpoint.
@@ -45,3 +46,23 @@ def three_d_robot_arm_links(link_vectors,joint_angles,joint_axes):
     #Return link_set and all intermediary values
     return link_set, r_joints, r_links, link_set_local, link_vectors_in_world, links_in_world, link_end_set, link_end_set_with_base
 
+
+def three_d_robot_arm_endpoints(link_vectors, joint_angles, joint_axes):
+
+    #feeling kinda lazy
+    #going to reuse what's written above since these are 90% the same function
+    #probably they should just be combined into 1 master function? but I don't want to rewrite this right now...
+    links_output = three_d_robot_arm_links(link_vectors,joint_angles,joint_axes)
+
+    #Remap the outputs:
+    r_joints = links_output[1]
+    r_links = links_output[2]
+    link_vectors_in_world = links_output[4]
+    link_end_set = links_output[6]
+    link_end_set_with_base = links_output[7]
+
+    #finally squish link_end_set into one array called link_ends
+    link_ends = np.concatenate(link_end_set_with_base, axis=1)
+
+    #and return everything:
+    return link_ends,r_joints,r_links,link_vectors_in_world,link_end_set,link_end_set_with_base

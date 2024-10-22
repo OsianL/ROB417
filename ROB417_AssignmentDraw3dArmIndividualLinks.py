@@ -9,13 +9,13 @@ import Links
 import Rotations as Ro
 import Drawing as Dw
 import VectorSets as Vs
-from ThreeDRobotArmLinks import three_d_robot_arm_links
+from ThreeDRobotArm import three_d_robot_arm_links
 
 #Objective: Draw a 3 Axis arm in 3D given the link_vectors, joint angles, and joint axes of rotation
 
 #Set up our inputs:
 #link vectors in their local coordinate frames
-link_vectors = [np.mat('4; 0; 0'),np.mat('4; 0; 0'),np.mat('0; 0; 2')]
+link_vectors = [np.array([[4],[0],[0]]),np.array([[4],[0],[0]]),np.array([[0],[0],[2]])]
 #static joint angles
 joint_angles = [2*pi/5,-pi/4,pi/4]
 #corresponding joint axes of rotation
@@ -48,9 +48,10 @@ limits = [-2,8,-2,8,-2,8]
 f,ax = Dw.create_3d_axes(417,limits)
 
 #plot each link:
-l = Dw.three_d_draw_links(link_set,link_colors,ax,'-')
+l = Dw.three_d_draw_links(link_set,link_colors,ax[0],linestyle = '-')
 
 #plot the joint axis
-l2 = Dw.three_d_draw_links(joint_axes_set,link_colors,ax,'--')
+l2 = Dw.three_d_draw_links(joint_axes_set,link_colors,ax[0],linestyle = '--')
 
+#actually show the graph
 plt.show()
