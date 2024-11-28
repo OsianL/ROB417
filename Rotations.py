@@ -52,7 +52,7 @@ def r_z(theta):
 def three_d_rotation_set(joint_angles, joint_axes):
 
     #Can be a shallow copy since we are just creating a list of equal length
-    r_set = joint_angles.copy()
+    r_set = [None] * len(joint_angles)
 
     #iterate over the list and generate the relevant rotation matrices
     for i in range(0,len(joint_angles)):
