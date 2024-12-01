@@ -21,6 +21,7 @@ def create_3d_axes(fig_num,limits, num_rows=1, num_cols = 1, num_ax = 1):
     for i in range(0,num_ax):
 
         ax[i] = f.add_subplot(num_rows, num_cols, i+1, projection = '3d')
+        ax[i].set_aspect('equal')
         plt.axis(limits)
 
     return f,ax
@@ -40,9 +41,20 @@ def three_d_draw_links(link_set, link_colors, ax:plt.Axes, marker = 'o', linesty
         #x values are top row
         #y values are middle row
         #z values are bottom row
-        l[i] = ax.plot(link_set[i][0], link_set[i][1], link_set[i][2], color = link_colors[i], marker = marker, linestyle = linestyle)
+        #ax.plot() returns a tuple containing the line objects(s), so we work around this.
+        line, = ax.plot(link_set[i][0], link_set[i][1], link_set[i][2], color = link_colors[i], marker = marker, linestyle = linestyle)
+        l[i] = line
 
     return l
+
+#three_d_update_links
+#Updates each link plot object with new data so that they can be redrawn for animations
+def three_d_update_links(l,link_set):
+
+    #iterate over the plot objects
+    for i in range(0,len(l)):
+        #update the start and end points
+        l[i].set_data_3d(link_set[i][0],link_set[i][1],link_set[i][2])
 
 #Draw each vector (column) in the array V on an axes at point p using plt.quiver()
 def draw_vectors_at_point(p,v,ax,q_colors):
